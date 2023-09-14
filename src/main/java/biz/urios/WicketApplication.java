@@ -5,7 +5,7 @@ import org.apache.wicket.csp.CSPDirectiveSrcValue;
 import org.apache.wicket.markup.html.WebPage;
 
 import biz.urios.helper.FilmManager;
-import biz.urios.pages.FilmPageAlt;
+import biz.urios.pages.NewPage;
 
 /**
  * Demo for a certain datatable problem:
@@ -22,12 +22,15 @@ import biz.urios.pages.FilmPageAlt;
  * seems to be the natural way. Defining a PeopleDataProvider handing it // * to
  * the DataTable. All fine. But (there allway is a but): When the user clicks on
  * the table the AjaxEventBehavior gets activated (you see it in the console)
- * but there are no usefull information in the parameters.... it is more less
- * empty and so a little bit useless.
+ * [see line 68ff where the output is defined. But there are no usefull
+ * information in the parameters.... it is more less empty and so a little bit
+ * useless.
  * 
  * FilmPage <br>
- * That is the page that nearly works. Click is shown correctly etc. But this
- * time no pages etc.
+ * That is the page that nearly works. But go get there I had to define a
+ * FilmVirtualScrollResourceReference what (as the name implies is a
+ * virtualscroller (something I am not really want) However, Click is shown
+ * correctly etc. But this time no pages etc.
  * 
  * FilmPageAlt <br>
  * That is a variation of FilmPage (the only difference is in line 187. With the
@@ -45,7 +48,9 @@ public class WicketApplication extends AbstractUnifiedWicketApp {
 	 */
 	@Override
 	public Class<? extends WebPage> getHomePage() {
-		return FilmPageAlt.class;
+		// return FilmPageAlt.class;
+		// return FilmPage.class;
+		return NewPage.class;
 	}
 
 	/**
