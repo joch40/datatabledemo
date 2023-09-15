@@ -27,7 +27,7 @@ public class FilmDataGridView<T> extends DataGridView<T> {
 	protected Item<T> newRowItem(String id, int index, IModel<T> model)
 	{
 		System.out.println("at newRowItem index:"+index+ " id "+ id+ " model "+ model);
-		return new Item<>("<tr>"+id, index, model);
+		return new Item<>(id, index, model);
 	}
 
 }

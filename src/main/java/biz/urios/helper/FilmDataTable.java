@@ -18,10 +18,6 @@ public class FilmDataTable<T,S> extends DataTables<T, S> {
 	private static final long serialVersionUID = 1L;
 
 	private AjaxEventBehavior selectBehavior;
-//	public FilmDataTable(String id, List columns, IDataProvider dataProvider, long rowsPerPage) {
-//		super(id, columns, dataProvider, rowsPerPage);
-//		// TODO Auto-generated constructor stub
-//	}
 
 	public FilmDataTable(java.lang.String id, List<IColumn<T, S>> columns, IDataProvider<T> dataProvider,
 			long rowsPerPage, AjaxEventBehavior sB) {
@@ -47,26 +43,6 @@ public class FilmDataTable<T,S> extends DataTables<T, S> {
 
 	}
 
-//	@Override
-//	protected DataGridView<Person> newDataGridView(final String id,
-//			final List<IColumn<Person, String>> iColumns, final IDataProvider<Person> dataProvider) {
-//		return new DataGridView<Person>(id, iColumns, dataProvider) {
-//			
-//			
-//			
-//			@Override
-//			public long getItemsPerPage() {
-//				return rowsPerPage;
-//			}
-//		};
-//	}
-	public FilmDataGridView<Person> getGridView(String id, List<IColumn<Person, String>> populators,
-			IDataProvider<Person> dataProvider)
-	{
-		FilmDataGridView fdgv = new FilmDataGridView(id,populators,dataProvider);
-		return fdgv;
-	}
-	
 	//  protected DataGridView<T> newDataGridView(final String id, final List<? extends IColumn<T, S>> iColumns, final IDataProvider<T> dataProvider)
 	
 	@Override
