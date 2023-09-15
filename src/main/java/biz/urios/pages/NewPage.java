@@ -3,25 +3,20 @@ package biz.urios.pages;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.apache.wicket.Application;
 import org.apache.wicket.Component;
 import org.apache.wicket.ajax.AjaxEventBehavior;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.attributes.AjaxRequestAttributes;
-import org.apache.wicket.ajax.attributes.CallbackParameter;
 import org.apache.wicket.extensions.markup.html.repeater.data.table.IColumn;
 import org.apache.wicket.extensions.markup.html.repeater.data.table.PropertyColumn;
 import org.apache.wicket.markup.head.IHeaderResponse;
-import org.apache.wicket.markup.head.OnDomReadyHeaderItem;
 import org.apache.wicket.markup.html.WebPage;
 import org.apache.wicket.markup.html.panel.FeedbackPanel;
 import org.apache.wicket.model.Model;
 import org.apache.wicket.request.Request;
 import org.apache.wicket.request.cycle.RequestCycle;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
-import org.apache.wicket.resource.CoreLibrariesContributor;
 import org.apache.wicket.util.string.StringValue;
-import org.wicketstuff.datatables.DataTables;
 import org.wicketstuff.datatables.Sort;
 import org.wicketstuff.datatables.columns.SpanColumn;
 import org.wicketstuff.datatables.columns.SpanHeadersToolbar;
@@ -30,6 +25,7 @@ import org.wicketstuff.datatables.options.Options;
 import org.wicketstuff.datatables.options.SelectOptions;
 import org.wicketstuff.datatables.themes.BootstrapTheme;
 
+import biz.urios.helper.FilmDataTable;
 import biz.urios.helper.PeopleDataProvider;
 import biz.urios.helper.Person;
 
@@ -95,29 +91,8 @@ public class NewPage extends WebPage {
 			}
 		};
 		
-
+		final FilmDataTable<Person, String> table = new FilmDataTable <Person, String>("table", columns, dataProvider, 30,selectBehavior);
 		
-		final DataTables<Person, String> table = new DataTables<Person, String>("table", columns, dataProvider, 30) {
-			@Override
-			public void renderHead(IHeaderResponse response) {
-				super.renderHead(response);
-
-				Application app = getApplication();
-				CoreLibrariesContributor.contributeAjax(app, response);
-                CallbackParameter evt = CallbackParameter.explicit("evt");
-                CallbackParameter dt = CallbackParameter.explicit("dt");
-                CallbackParameter type = CallbackParameter.explicit("type");
-                CallbackParameter indexes = CallbackParameter.explicit("indexes");
-
-
-                String callbackFunction = selectBehavior.getCallbackFunction(evt, dt, type, indexes).toString();
-                response.render(OnDomReadyHeaderItem.forScript(String.format("$('#%s').on('select.dt', %s)", getMarkupId(), callbackFunction)));
-
-				// see rowSelector below
-//				response.render(OnDomReadyHeaderItem.forScript($(this)
-//						.on("click", "tr", new JavaScriptInlineFunction("$(this).toggleClass('selected');")).get()));
-			}
-		};
 		table.add(selectBehavior);
 		add(table);
 		
