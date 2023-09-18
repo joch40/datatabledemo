@@ -29,6 +29,7 @@ import biz.urios.helper.Film;
 import biz.urios.helper.FilmDataProvider;
 import biz.urios.helper.FilmDataTable;
 import biz.urios.helper.FilmManager;
+
 import de.agilecoders.wicket.jquery.util.Json;
 
 /**
@@ -43,9 +44,10 @@ public class FilmNewPage extends WebPage {
 	public FilmNewPage(PageParameters parameters) {
 		super(parameters);
 
-		//  Spalten Definition
+		//  General column definition
 		List<IColumn<Film, String>> columns = new ArrayList<>();
 		
+		// Here we have to add the id otherwise the call back will not find is (via the options setting)
 		columns.add(new SpanPropertyColumn<Film, String>(Model.of("id"), "id", "id") {
 			private static final long serialVersionUID = 1L;
 
@@ -67,14 +69,15 @@ public class FilmNewPage extends WebPage {
 			}
 		});
 
+		// Where should the page the call back report to
 		final FeedbackPanel feedback = new FeedbackPanel("feedback");
 		add(feedback);
 		feedback.setOutputMarkupId(true);
 
-		// Psydo Datenbank
+		// pseudo db
 		myFilmManager = FilmManager.getFilmManager();
 
-		// Instanz von SortableDataProvider welche für den DataTable gebraucht wird
+		// SortableDataProvider will be needed for Table
 		FilmDataProvider dataProvider = new FilmDataProvider();
 		dataProvider.setFilmManager(myFilmManager);
 
@@ -115,13 +118,12 @@ public class FilmNewPage extends WebPage {
 			}
 		};
 		
+		// Finally the Table
 		final FilmDataTable<Film, String> table = new FilmDataTable <Film, String>("table", columns, dataProvider, 2000,selectBehavior,myFilmManager.getFilms().size());
-		
 		table.add(selectBehavior);
 		add(table);
 		
-		
-
+		// Some decorations 
 		SpanColumn<Film, String> namesColumn = new SpanColumn<Film, String>(Model.of("mainTitle"), null) {
 			@Override
 			public int getColspan() {
@@ -130,15 +132,13 @@ public class FilmNewPage extends WebPage {
 		};
 		table.addTopToolbar(new SpanHeadersToolbar<String>(table, namesColumn));
 		table.addTopToolbar(new SpanHeadersToolbar<String>(table));
-//        table.addTopToolbar(new HeadersToolbar<String>(table, dataProvider));
 
 		
-
+		// Now the most important options
         SelectOptions selectOptions = new SelectOptions()
                 .style(SelectOptions.Style.OS);
 
-        
-		Options options = table.getOptions();
+        Options options = table.getOptions();
 		table.add(new BootstrapTheme(options));
 		options.order(new Sort(2, Sort.Direction.ASC)); // single column ordering
 		options.stateDuration(3600)
@@ -146,7 +146,7 @@ public class FilmNewPage extends WebPage {
 		.pagingType(Options.PagingType.simple)
 		.select(selectOptions)
 		.retrieve(true)
-		.rowId(new Json.RawValue("0"));
+		.rowId(new Json.RawValue("0")) // <-- This enables the call back 
 		;
 
 	}
