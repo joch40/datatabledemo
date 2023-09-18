@@ -18,11 +18,14 @@ public class FilmDataTable<T,S> extends DataTables<T, S> {
 	private static final long serialVersionUID = 1L;
 
 	private AjaxEventBehavior selectBehavior;
+	
+	private int maxrows; 
 
 	public FilmDataTable(java.lang.String id, List<IColumn<T, S>> columns, IDataProvider<T> dataProvider,
-			long rowsPerPage, AjaxEventBehavior sB) {
+			long rowsPerPage, AjaxEventBehavior sB, int max) {
 		super(id, columns, dataProvider, rowsPerPage);
 		selectBehavior = sB;
+		maxrows = max; 
 
 	}
 
@@ -49,7 +52,7 @@ public class FilmDataTable<T,S> extends DataTables<T, S> {
 	protected DataGridView<T> newDataGridView (final String id, final List<? extends IColumn<T, S>> populators,
 			final IDataProvider<T> dataProvider)
 	{
-		DataGridView fdgv = new FilmDataGridView(id,populators,dataProvider);
+		DataGridView fdgv = new FilmDataGridView(id,populators,dataProvider, maxrows);
 		return fdgv;
 	}
 	

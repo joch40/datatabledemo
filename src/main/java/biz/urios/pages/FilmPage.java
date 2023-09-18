@@ -38,6 +38,7 @@ import biz.urios.helper.FilmDataProvider;
 import biz.urios.helper.FilmManager;
 import biz.urios.helper.FilmVirtualScrollResourceReference;
 import de.agilecoders.wicket.jquery.function.JavaScriptInlineFunction;
+import de.agilecoders.wicket.jquery.util.Json;
 
 /**
  * 
@@ -104,34 +105,47 @@ public class FilmPage extends WebPage {
 			protected void onEvent(final AjaxRequestTarget target) {
 				Request request = RequestCycle.get().getRequest();
 				List<StringValue> values = request.getRequestParameters().getParameterValues("id");
-
-				for (StringValue sv : values) {
-					System.out.println("StringValue: " + sv);
-					iDlabel.setDefaultModelObject(sv);
-					Film f = dataProvider.getFilmFromStringID(sv);
-					namelabel.setDefaultModelObject(f.getmainTitle());
+				if (values == null || values.isEmpty())
+				{
+					System.out.println(" Got Call Back from Table but Parameters are empty");
 				}
+				else
+				{
+					System.out.println(" Got Call Back from Table Parameters are: ");
+					for (StringValue sv : values) {
+						System.out.println("StringValue: " + sv);
+					}
+					info("Selected: " + values);
+//					target.add(feedback);
+				}
+				
+//				for (StringValue sv : values) {
+//					System.out.println("StringValue: " + sv);
+//					iDlabel.setDefaultModelObject(sv);
+//					Film f = dataProvider.getFilmFromStringID(sv);
+//					namelabel.setDefaultModelObject(f.getmainTitle());
+//				}
 
-				info("Selected: " + values);
+//				info("Selected: " + values);
 				// Hier müssen - nach entsprechender Vorbereitung die Empfängerfelder die
 				// geändert werden sollen eingetragen werden.
 				target.add(iDlabel);
 				target.add(namelabel);
 			}
 
-			@Override
-			protected void updateAjaxAttributes(final AjaxRequestAttributes attributes) {
-				super.updateAjaxAttributes(attributes);
-				// Verstehe ich immer noch nicht
-				attributes.getDynamicExtraParameters()
-						.add("var arr=[]; dt.rows(indexes).every(function() {arr=arr.concat({\"name\":\"id\","
-								+ "\"value\": $(this.node()).attr('id')})}); return arr;");
-			}
-
-			@Override
-			public void renderHead(final Component component, final IHeaderResponse response) {
-				// do not contribute the default
-			}
+//			@Override
+//			protected void updateAjaxAttributes(final AjaxRequestAttributes attributes) {
+//				super.updateAjaxAttributes(attributes);
+//				// Verstehe ich immer noch nicht
+//				attributes.getDynamicExtraParameters()
+//						.add("var arr=[]; dt.rows(indexes).every(function() {arr=arr.concat({\"name\":\"id\","
+//								+ "\"value\": $(this.node()).attr('id')})}); return arr;");
+//			}
+//
+//			@Override
+//			public void renderHead(final Component component, final IHeaderResponse response) {
+//				// do not contribute the default
+//			}
 		};
 
 		/**
@@ -154,8 +168,8 @@ public class FilmPage extends WebPage {
 						.forScript(String.format("$('#%s').on('select.dt', %s)", getMarkupId(), callbackFunction)));
 
 				// see rowSelector below
-				response.render(OnDomReadyHeaderItem.forScript($(this)
-						.on("click", "tr", new JavaScriptInlineFunction("$(this).toggleClass('selected');")).get()));
+//				response.render(OnDomReadyHeaderItem.forScript($(this)
+//						.on("click", "tr", new JavaScriptInlineFunction("$(this).toggleClass('selected');")).get()));
 			}
 		};
 		add(table);
@@ -170,7 +184,7 @@ public class FilmPage extends WebPage {
 
 		table.addTopToolbar(new SpanHeadersToolbar<>(table));
 
-		CharSequence ajaxUrl = urlFor(new FilmVirtualScrollResourceReference(), null);
+//		CharSequence ajaxUrl = urlFor(new FilmVirtualScrollResourceReference(), null);
 
 		ScrollerOptions scrollerOptions = new ScrollerOptions();
 		scrollerOptions.loadingIndicator(true).displayBuffer(100).serverWait(500);
@@ -179,23 +193,31 @@ public class FilmPage extends WebPage {
 
 		Options options = table.getOptions();
 		table.add(new BootstrapTheme(options));
-		options.columns(jsColumns)
-				.select(selectOptions)
-				.serverSide(true)
-				.ordering(false)
-				.searching(true)
-				.paging(true)
-				.pagingType(Options.PagingType.full)
-				.scrollY("450") // <-- If on click will be active but paging off 
-								//	if off paging will be active but click will go unnoticed 
-				.deferRender(true)
-				.scroller(scrollerOptions)
-				.ajax(ajaxUrl)
-				.stateSave(true)
-				.info(true)
-				.processing(true)
-				.retrieve(true)
-				;
+
+		options.stateDuration(3600)
+		.stateSave(true)
+		.pagingType(Options.PagingType.simple)
+		// 
+		.select(selectOptions)
+		.retrieve(true)
+		.rowId(new Json.RawValue("0"));
+
+//				.select(selectOptions)
+//				.serverSide(true)
+//				.ordering(false)
+//				.searching(true)
+//				.paging(true)
+//				.pagingType(Options.PagingType.full)
+////				.scrollY("450") // <-- If on click will be active but paging off 
+////								//	if off paging will be active but click will go unnoticed 
+//				.deferRender(true)
+//				.scroller(scrollerOptions)
+////				.ajax(ajaxUrl)
+//				.stateSave(true)
+//				.info(true)
+//				.processing(true)
+//				.retrieve(true)
+//				;
 	}
 
 }

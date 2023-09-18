@@ -12,21 +12,25 @@ public class FilmDataGridView<T> extends DataGridView<T> {
 	
 	private static final long serialVersionUID = 1L;
 	
-	public FilmDataGridView(String id, List<IColumn<T, String>> populators,
-			IDataProvider<T> dataProvider) {
-		super(id, populators, dataProvider);
+	private int maxrows; 
 	
+	public FilmDataGridView(String id, List<IColumn<T, String>> populators,
+			IDataProvider<T> dataProvider, int max) {
+		super(id, populators, dataProvider);
+		maxrows = max;
 	}
 
 	@Override
 	public long getItemsPerPage() {
-		return 30;
+		return 2000;
 	}
 	
 	@Override
 	protected Item<T> newRowItem(String id, int index, IModel<T> model)
 	{
-		System.out.println("at newRowItem index:"+index+ " id "+ id+ " model "+ model);
+		// System.out.println("at newRowItem index:"+index+ " id "+ id+ " model "+ model);
+		
+		// return new Item<>("DT_RowId"+id, index, model);
 		return new Item<>(id, index, model);
 	}
 

@@ -25,23 +25,42 @@ import org.wicketstuff.datatables.options.Options;
 import org.wicketstuff.datatables.options.SelectOptions;
 import org.wicketstuff.datatables.themes.BootstrapTheme;
 
+import biz.urios.helper.Film;
+import biz.urios.helper.FilmDataProvider;
 import biz.urios.helper.FilmDataTable;
-import biz.urios.helper.PeopleDataProvider;
-import biz.urios.helper.Person;
+import biz.urios.helper.FilmManager;
 import de.agilecoders.wicket.jquery.util.Json;
 
 /**
  *
  */
-public class NewPage extends WebPage {
-
-	public NewPage(PageParameters parameters) {
+public class FilmNewPage extends WebPage {
+	
+	private static final long serialVersionUID = 1L;
+	
+	FilmManager myFilmManager;
+	
+	public FilmNewPage(PageParameters parameters) {
 		super(parameters);
 
-		List<IColumn<Person, String>> columns = new ArrayList<>();
-		columns.add(new PropertyColumn<>(Model.of("First"), "firstName", "firstName"));
-		columns.add(new PropertyColumn<>(Model.of("Last"), "lastName", "lastName"));
-		columns.add(new SpanPropertyColumn<Person, String>(Model.of("Age"), "age", "age") {
+		//  Spalten Definition
+		List<IColumn<Film, String>> columns = new ArrayList<>();
+		
+		columns.add(new SpanPropertyColumn<Film, String>(Model.of("id"), "id", "id") {
+			private static final long serialVersionUID = 1L;
+
+			@Override
+			public int getRowspan() {
+				return 2;
+			}
+		});
+		
+		columns.add(new PropertyColumn<>(Model.of("mainTitle"), "mainTitle", "mainTitle"));
+		columns.add(new PropertyColumn<>(Model.of("directors"), "directors", "directors"));
+		columns.add(new PropertyColumn<>(Model.of("generes"), "generes", "generes"));
+		columns.add(new SpanPropertyColumn<Film, String>(Model.of("year"), "year", "year") {
+			private static final long serialVersionUID = 1L;
+
 			@Override
 			public int getRowspan() {
 				return 2;
@@ -52,8 +71,12 @@ public class NewPage extends WebPage {
 		add(feedback);
 		feedback.setOutputMarkupId(true);
 
-		PeopleDataProvider dataProvider = new PeopleDataProvider(null);
+		// Psydo Datenbank
+		myFilmManager = FilmManager.getFilmManager();
 
+		// Instanz von SortableDataProvider welche für den DataTable gebraucht wird
+		FilmDataProvider dataProvider = new FilmDataProvider();
+		dataProvider.setFilmManager(myFilmManager);
 
 		final AjaxEventBehavior selectBehavior = new AjaxEventBehavior("select.dt") {
 			private static final long serialVersionUID = -1127930233103803502L;
@@ -92,21 +115,21 @@ public class NewPage extends WebPage {
 			}
 		};
 		
-		final FilmDataTable<Person, String> table = new FilmDataTable <Person, String>("table", columns, dataProvider, 30,selectBehavior, (int) dataProvider.size());
+		final FilmDataTable<Film, String> table = new FilmDataTable <Film, String>("table", columns, dataProvider, 2000,selectBehavior,myFilmManager.getFilms().size());
 		
 		table.add(selectBehavior);
 		add(table);
 		
 		
 
-		SpanColumn<Person, String> namesColumn = new SpanColumn<Person, String>(Model.of("Names"), null) {
+		SpanColumn<Film, String> namesColumn = new SpanColumn<Film, String>(Model.of("mainTitle"), null) {
 			@Override
 			public int getColspan() {
 				return 2;
 			}
 		};
-		table.addTopToolbar(new SpanHeadersToolbar<>(table, namesColumn));
-		table.addTopToolbar(new SpanHeadersToolbar<>(table));
+		table.addTopToolbar(new SpanHeadersToolbar<String>(table, namesColumn));
+		table.addTopToolbar(new SpanHeadersToolbar<String>(table));
 //        table.addTopToolbar(new HeadersToolbar<String>(table, dataProvider));
 
 		
@@ -116,38 +139,16 @@ public class NewPage extends WebPage {
 
         
 		Options options = table.getOptions();
-		System.out.println( " Vorher ID: "+Options.RowId);
 		table.add(new BootstrapTheme(options));
 		options.order(new Sort(2, Sort.Direction.ASC)); // single column ordering
-//        table.getOptions().order(new Sort(2, Sort.Direction.DESC), new Sort(0, Sort.Direction.ASC)); // multi column ordering
 		options.stateDuration(3600)
 		.stateSave(true)
 		.pagingType(Options.PagingType.simple)
-		// 
 		.select(selectOptions)
 		.retrieve(true)
 		.rowId(new Json.RawValue("0"));
-
-//            .paging(false)
-//            .scrollY("350px")
-//            .scrollCollapse(true)
-
-//            .scrollX(true)
-
-				// highlights the second row
-				// recommendation: load the String with PackageTextTemplate
-//				.rowCallback(new Json.RawValue(
-//						"function(row, data, displayIndex) {if(displayIndex == 1) {$(row).addClass('selected')}}"))
-
-				// makes the age in bold and underlined
-				// recommendation: load the String with PackageTextTemplate
-//				.createdRow(new Json.RawValue(
-//						"function(row, data, displayIndex) { $('td', row).eq(2).wrapInner('<b><u></u></b>');}"))
-
-//            .lengthMenu(new Integer[]{1,2,5,10}, new String[]{"One", "Two", "Five", "Ten"})
 		;
-		
-		System.out.println( " Nacher ID: "+Options.RowId.toString());
+
 	}
 
 }

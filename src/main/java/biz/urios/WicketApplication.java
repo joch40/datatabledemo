@@ -5,7 +5,7 @@ import org.apache.wicket.csp.CSPDirectiveSrcValue;
 import org.apache.wicket.markup.html.WebPage;
 
 import biz.urios.helper.FilmManager;
-import biz.urios.pages.NewPage;
+import biz.urios.pages.FilmNewPage;
 
 /**
  * Demo for a certain datatable problem:
@@ -49,8 +49,8 @@ public class WicketApplication extends AbstractUnifiedWicketApp {
 	@Override
 	public Class<? extends WebPage> getHomePage() {
 		// return FilmPageAlt.class;
-		// return FilmPage.class;
-		return NewPage.class;
+		return FilmNewPage.class;
+		//return NewPage.class;
 	}
 
 	/**
