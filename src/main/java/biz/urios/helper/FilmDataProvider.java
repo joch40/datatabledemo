@@ -27,7 +27,6 @@ public class FilmDataProvider extends SortableDataProvider<Film, String> {
 		super();
 		myFilmManager = null;
 		searchFilter = null;
-		int i = 0;
 	}
 
 	public FilmDataProvider(String searchFilter) {
@@ -74,23 +73,7 @@ public class FilmDataProvider extends SortableDataProvider<Film, String> {
 		return ret;
 	}
 
-//	public JSONArray getDataAsJSON() {
-//		JSONArray data = new JSONArray();
-//
-//		ArrayList<Film> theFilms = myFilmManager.getFilms();
-//		for (Film f : theFilms) {
-//
-//			JSONObject json = new JSONObject();
-//			json.put("DT_RowId", "PK_" + f.getEmdbId());
-//			json.put("DT_RowClass", "custom");
-//
-//			json.put("mainTitle", f.getmainTitle());
-//			json.put("imdbId", f.getImdbId());
-//			json.put("directors", f.getDirectors());
-//			json.put("year", f.getYear());
-//			data.put(json);
-//		}
-//		return data;
-//	}
-
+	public String getSearchFilter() {
+		return searchFilter;
+	}
 }

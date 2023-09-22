@@ -56,6 +56,20 @@ public class Film implements Serializable {
 				+ ", tags=" + tags + ", generes=" + generes + ", media=" + media  + "]";
 	}
 
+//	@Override
+//	public JSONObject getObject() {
+//		JSONObject entryJson = new JSONObject(); 
+//		entryJson.put("DT_RowId",  getId());
+//		entryJson.put("DT_RowClass", "custom");
+//
+//		entryJson.put("mainTitle", getmainTitle());
+////		entryJson.put("imdbId", f.getImdbId());
+//		entryJson.put("directors", getDirectors());
+//		entryJson.put("generes", getGeneres());
+//		entryJson.put("year", getYear());
+//		return entryJson;
+//	}
+
 	
 	public long getId() {
 		return id;
@@ -104,5 +118,6 @@ public class Film implements Serializable {
 	public String getMedia() {
 		return media;
 	}
+
 
 }

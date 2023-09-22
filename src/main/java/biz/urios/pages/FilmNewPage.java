@@ -29,7 +29,6 @@ import biz.urios.helper.Film;
 import biz.urios.helper.FilmDataProvider;
 import biz.urios.helper.FilmDataTable;
 import biz.urios.helper.FilmManager;
-
 import de.agilecoders.wicket.jquery.util.Json;
 
 /**
@@ -87,6 +86,8 @@ public class FilmNewPage extends WebPage {
 			@Override
 			protected void onEvent(final AjaxRequestTarget target) {
 				Request request = RequestCycle.get().getRequest();
+				// 
+// 				List<StringValue> values = request.getRequestParameters().getParameterValues("DT_RowId");
 				List<StringValue> values = request.getRequestParameters().getParameterValues("id");
 				if (values == null || values.isEmpty())
 				{
@@ -143,6 +144,7 @@ public class FilmNewPage extends WebPage {
 		options.order(new Sort(2, Sort.Direction.ASC)); // single column ordering
 		options.stateDuration(3600)
 		.stateSave(true)
+		// .serverSide(true)
 		.pagingType(Options.PagingType.simple)
 		.select(selectOptions)
 		.retrieve(true)
